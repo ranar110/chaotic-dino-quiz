@@ -223,10 +223,9 @@
             {filtered.map(dino => (
               <Link key={dino.id} href={`/info?id=${dino.id}`}>
                 <div className="card">
-                  <img src={dino.img} alt={dino.name} className="poster-img" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6 }} />
-                  <div className="poster-text" style={{ position: 'absolute', inset: 0, opacity: dino.img.includes('placeholder') ? 1 : 0 }}> {dino.name.substring(0, 3)} </div>
+                  <img src={dino.img} alt={dino.name} className="poster-img" />
                   <div className="card-content">
-                    <div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{dino.name}</div>
+                    <div style={{ fontWeight: 'bold', fontSize: '0.9rem', color: '#fff' }}>{dino.name}</div>
                     <div style={{ fontSize: '0.7rem', color: '#aaa' }}>{dino.tags.slice(0, 2).join(' • ')}</div>
                   </div>
                 </div>
@@ -345,10 +344,10 @@
           <p className="dino-desc">Tap the image below to learn more about your dino soulmate.</p>
 
           <Link href={`/info?id=${dino.id}`}>
-            <div className="card" style={{ width: '300px', height: '400px', margin: '20px auto', transform: 'scale(1)', border: '4px solid #fff' }}>
-              <img src={dino.img} alt={dino.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              <div className="card-content">
-                <span style={{ textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '2px' }}>More Info</span>
+            <div className="card" style={{ width: '300px', height: '400px', margin: '20px auto', border: '4px solid #fff' }}>
+              <img src={dino.img} alt={dino.name} className="poster-img" />
+              <div className="card-content" style={{ alignItems: 'center' }}>
+                <span style={{ textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '2px', color: '#fff' }}>More Info</span>
               </div>
             </div>
           </Link>
