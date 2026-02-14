@@ -160,6 +160,8 @@
       }
     ];
 
+    // --- Components ---
+
     // Background 3D
     function Background3D() {
       return (
@@ -186,12 +188,7 @@
           <Link href="/">
             <a className="brand">DINOFLIX</a>
           </Link>
-          <div className="nav-links" style={{ display: 'flex', gap: '20px' }}>
-            <span>Home</span>
-            <span>Series</span>
-            <span>Films</span>
-            <span>My List</span>
-          </div>
+          {/* Non-functional links removed as requested */}
         </nav>
       );
     }
@@ -226,14 +223,16 @@
           <div className="row-title">{title}</div>
           <div className="row-cards">
             {filtered.map(dino => (
-              <div key={dino.id} className="card">
-                <img src={dino.img} alt={dino.name} className="poster-img" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6 }} />
-                <div className="poster-text" style={{ position: 'absolute', inset: 0, opacity: dino.img.includes('placeholder') ? 1 : 0 }}> {dino.name.substring(0, 3)} </div>
-                <div className="card-content">
-                  <div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{dino.name}</div>
-                  <div style={{ fontSize: '0.7rem', color: '#aaa' }}>{dino.tags.slice(0, 2).join(' • ')}</div>
+              <Link key={dino.id} href={`/info?id=${dino.id}`}>
+                <div className="card">
+                  <img src={dino.img} alt={dino.name} className="poster-img" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6 }} />
+                  <div className="poster-text" style={{ position: 'absolute', inset: 0, opacity: dino.img.includes('placeholder') ? 1 : 0 }}> {dino.name.substring(0, 3)} </div>
+                  <div className="card-content">
+                    <div style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{dino.name}</div>
+                    <div style={{ fontSize: '0.7rem', color: '#aaa' }}>{dino.tags.slice(0, 2).join(' • ')}</div>
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -307,6 +306,38 @@
       );
     }
 
+    function DinoInfo() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      const dino = dinoData.find(d => d.id === id) || dinoData[0];
+
+      return (
+        <div className="result-hero" style={{ background: 'linear-gradient(to top, #141414, transparent), url(' + dino.img + ') no-repeat center center / cover' }}>
+          <div style={{ background: 'rgba(0,0,0,0.7)', padding: '40px', borderRadius: '8px', maxWidth: '800px' }}>
+            <h1 className="dino-name" style={{ fontSize: '4rem' }}>{dino.name}</h1>
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', marginBottom: '20px' }}>
+              {dino.tags.map(tag => (
+                <span key={tag} style={{ background: '#333', padding: '4px 8px', borderRadius: '4px', fontSize: '0.8rem', textTransform: 'uppercase' }}>{tag}</span>
+              ))}
+            </div>
+            <p className="dino-desc" style={{ fontSize: '1.2rem' }}>{dino.desc}</p>
+            <div className="btn-group" style={{ justifyContent: 'center', marginTop: '30px' }}>
+              <Link href="/">
+                <button className="btn btn-play">
+                  ⌂ Home
+                </button>
+              </Link>
+              <Link href="/quiz">
+                <button className="btn btn-info">
+                  ↻ Retake Quiz
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     function ResultPage() {
       const [location] = useLocation();
       const params = new URLSearchParams(window.location.search);
@@ -317,11 +348,21 @@
         <div className="result-hero">
           <div className="match-score">98% Match</div>
           <h1 className="dino-name">{dino.name}</h1>
-          <p className="dino-desc">{dino.desc}</p>
+          <p className="dino-desc">Tap the image below to learn more about your dino soulmate.</p>
+
+          <Link href={`/info?id=${dino.id}`}>
+            <div className="card" style={{ width: '300px', height: '400px', margin: '20px auto', transform: 'scale(1)', border: '4px solid #fff' }}>
+              <img src={dino.img} alt={dino.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div className="card-content">
+                <span style={{ textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '2px' }}>More Info</span>
+              </div>
+            </div>
+          </Link>
+
           <div className="btn-group">
             <Link href="/">
-              <button className="btn btn-play">
-                ↻ Play Again
+              <button className="btn btn-info">
+                ⌂ Home
               </button>
             </Link>
           </div>
@@ -354,6 +395,7 @@
             <Route path="/" component={Home} />
             <Route path="/quiz" component={QuizModal} />
             <Route path="/result" component={ResultPage} />
+            <Route path="/info" component={DinoInfo} />
           </Switch>
         </>
       );
